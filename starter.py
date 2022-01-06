@@ -76,7 +76,7 @@ if app.config.get("ENV") != "production":
                 <a href="https://www.talelin.com" target="_Blank">Lin</a>
                 <br />
                 <span style="font-size:30px">
-                    <a href="/apidoc/redoc">心上无垢</a>，<a href="/apidoc/swagger">林间有风</a>。
+                    <a href="/apidoc/redoc">Hello Project-T!</a>
                 </span>
             </p>
         </div>
