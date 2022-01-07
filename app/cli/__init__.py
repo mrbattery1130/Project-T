@@ -32,7 +32,7 @@ def db_fake():
     click.echo("fake数据添加成功")
 
 
-@db_cli.command("init catalogue")
+@db_cli.command("init_catalogue")
 def db_init_catalogue():
     """
     initialize the catalogue data.
