@@ -11,27 +11,6 @@ from app.validator.schema import CatalogueOutSchema, BookSchemaList, CatalogueSc
 
 app_icon_api = Redprint('app_icon')
 
-
-@app_icon_api.route('/app', methods=['GET'])
-def get_apps():
-    apps: List[App] = App.get_all_apps()
-    return jsonify(apps)
-
-
-@app_icon_api.route('/app', methods=['POST'])
-def create_apps():
-    pass
-    # form = CreateOrUpdateAppForm().validate_for_api()
-    # App.new_app(form)
-    # return Success(msg='新建App成功')
-
-
-# @icon_manager_api.route('/app_rel', methods=['POST'])
-# def create_app_rel():
-#     form = CreateOrUpdateBookForm().validate_for_api()
-#     Book.new_book(form)
-#     return Success(msg='新建图书成功')
-
 @app_icon_api.route('/catalogue/<int:id>')
 @api.validate(
     resp=DocResponse(CatalogueNotFound, r=CatalogueOutSchema),
