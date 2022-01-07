@@ -44,7 +44,7 @@ name_ens: List[str] = [
 def init_catalogue():
     with db.auto_commit():
         # 添加
-        for index in range(1, 14):
+        for index in range(1, len(names) + 1):
             catalogue: Catalogue = Catalogue()
             catalogue.id = index
             catalogue.name = names[index]
