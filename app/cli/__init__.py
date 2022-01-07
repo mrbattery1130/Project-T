@@ -3,6 +3,7 @@ from flask.cli import AppGroup
 
 from .db import fake as _db_fake
 from .db import init as _db_init
+from .db.init_catalogue import init_catalogue
 from .plugin import generate as _plugin_generate
 from .plugin import init as _plugin_init
 
@@ -29,6 +30,15 @@ def db_fake():
     """
     _db_fake()
     click.echo("fake数据添加成功")
+
+
+@db_cli.command("init catalogue")
+def db_init_catalogue():
+    """
+    initialize the catalogue data.
+    """
+    init_catalogue()
+    click.echo("catalogue数据初始化成功")
 
 
 @plugin_cli.command("init", with_appcontext=False)
