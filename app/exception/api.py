@@ -16,3 +16,8 @@ class RefreshFailed(Failed):
     message = "令牌刷新失败"
     message_code = 10052
     _config = False
+
+
+class CatalogueNotFound(NotFound):
+    message = "分类不存在"
+    _config = False

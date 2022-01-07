@@ -87,3 +87,13 @@ class BookSchemaList(BaseModel):
 class Language(str, Enum):
     en = "en-US"
     zh = "zh-CN"
+
+
+class CatalogueOutSchema(BaseModel):
+    id: int
+    name: str
+    name_en: str
+
+
+class CatalogueSchemaList(BaseModel):
+    __root__: List[CatalogueOutSchema]
