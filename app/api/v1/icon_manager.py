@@ -14,10 +14,10 @@ from app.model.icon_manager.catalogue_model import Catalogue
 from app.validator.schema import CatalogueOutSchema, CatalogueSchemaList, AppOutSchema, AuthorizationSchema, \
     AppInSchema, AppPageSchemaList
 
-app_icon_api = Redprint('app_icon')
+app_api = Redprint('app')
 
 
-@app_icon_api.route('/catalogue/<c_id>')
+@app_api.route('/catalogue/<c_id>')
 @api.validate(
     resp=DocResponse(CatalogueNotFound, r=CatalogueOutSchema),
     tags=['分类'],
@@ -29,7 +29,7 @@ def get_catalogue(c_id: int):
     raise CatalogueNotFound
 
 
-@app_icon_api.route("/catalogue")
+@app_api.route("/catalogue")
 @api.validate(
     resp=DocResponse(r=CatalogueSchemaList),
     tags=["分类"],
@@ -38,7 +38,7 @@ def get_catalogues():
     return Catalogue.get(one=False)
 
 
-@app_icon_api.route('/app/<app_id>')
+@app_api.route('/<app_id>')
 @api.validate(
     resp=DocResponse(AppNotFound, r=AppOutSchema),
     tags=['App'],
@@ -50,7 +50,7 @@ def get_app(app_id):
     raise AppNotFound
 
 
-@app_icon_api.route('/app')
+@app_api.route('')
 @api.validate(
     resp=DocResponse(r=AppPageSchemaList),
     tags=["App"],
@@ -73,7 +73,7 @@ def get_apps():
     )
 
 
-@app_icon_api.route("", methods=["POST"])
+@app_api.route("", methods=["POST"])
 @login_required
 @api.validate(
     headers=AuthorizationSchema,
@@ -87,7 +87,7 @@ def create_app():
     return Success(16)
 
 
-@app_icon_api.route("/<app_id>", methods=["PUT"])
+@app_api.route("/<app_id>", methods=["PUT"])
 @login_required
 @api.validate(
     headers=AuthorizationSchema,
@@ -111,7 +111,7 @@ def update_app(app_id):
     raise AppNotFound
 
 
-@app_icon_api.route("/<app_id>", methods=["DELETE"])
+@app_api.route("/<app_id>", methods=["DELETE"])
 # @permission_meta(name="删除App", module="App")
 # @group_required
 @login_required
