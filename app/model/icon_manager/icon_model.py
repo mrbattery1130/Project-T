@@ -3,6 +3,7 @@ from sqlalchemy import Column, String, Integer
 
 
 class Icon(Base):
+    __tablename__ = "icon"
     id: Column = Column(Integer, primary_key=True, autoincrement=True)
     url: Column = Column(String(100), nullable=False)
     iconpack_id: Column = Column(Integer, nullable=False)

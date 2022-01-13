@@ -3,6 +3,7 @@ from sqlalchemy import Column, String, Integer
 
 
 class App(Base):
+    __tablename__ = "app"
     id: Column = Column(Integer, primary_key=True, autoincrement=True)
     name: Column = Column(String(50), nullable=False)
     name_en: Column = Column(String(50), nullable=False)
