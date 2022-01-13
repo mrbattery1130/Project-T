@@ -4,3 +4,4 @@ FLASK_RUN_HOST="0.0.0.0"
 FLASK_RUN_PORT=5001
 # production  or development  etc.
 FLASK_ENV=development
+SITE_DOMAIN="http://119.45.254.65:5001"
