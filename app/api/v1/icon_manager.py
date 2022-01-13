@@ -44,6 +44,9 @@ def get_catalogues():
     tags=['App'],
 )
 def get_app(app_id):
+    """
+    获取id指定App的信息
+    """
     app: App = App.get(id=app_id)
     if app:
         return app
@@ -56,6 +59,9 @@ def get_app(app_id):
     tags=["App"],
 )
 def get_apps():
+    """
+    获取App列表
+    """
     # return App.get(one=False)
     apps = App.query.filter()
     total = apps.count()
@@ -82,6 +88,9 @@ def get_apps():
     tags=["App"],
 )
 def create_app():
+    """
+    创建App
+    """
     app_schema = request.context.json
     App.create(**app_schema.dict(), commit=True)
     return Success(16)
@@ -97,7 +106,7 @@ def create_app():
 )
 def update_app(app_id):
     """
-    更新图书信息
+    更新App信息
     """
     app_schema = request.context.json
     app = App.get(id=app_id)
@@ -122,7 +131,7 @@ def update_app(app_id):
 )
 def delete_book(app_id):
     """
-    传入id删除对应图书
+    传入id删除对应App
     """
     app = App.get(id=app_id)
     if app:
