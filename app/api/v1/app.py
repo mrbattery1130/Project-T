@@ -12,7 +12,7 @@ from app.exception.api import CatalogueNotFound, AppNotFound
 from app.model.icon_manager.app_model import App
 from app.model.icon_manager.catalogue_model import Catalogue
 from app.validator.schema import CatalogueOutSchema, CatalogueSchemaList, AppOutSchema, AuthorizationSchema, \
-    AppInSchema, AppPageSchemaList
+    AppInSchema, AppPageSchemaList, AppQuerySearchSchema
 
 app_api = Redprint('app')
 
@@ -55,12 +55,15 @@ def get_app(app_id):
 
 @app_api.route('')
 @api.validate(
+    # headers=AuthorizationSchema,
+    query=AppQuerySearchSchema,
     resp=DocResponse(r=AppPageSchemaList),
+    before=AppQuerySearchSchema.offset_handler,
     tags=["App"],
 )
 def get_apps():
     """
-    获取App列表
+    获取App列表，分页展示
     """
     # return App.get(one=False)
     apps = App.query.filter()
@@ -70,7 +73,7 @@ def get_apps():
     )
     total_page = math.ceil(total / g.count)
 
-    return App.get(
+    return AppPageSchemaList(
         page=g.page,
         count=g.count,
         total=total,

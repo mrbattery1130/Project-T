@@ -103,8 +103,8 @@ class AppInSchema(BaseModel):
     name: str
     name_en: str
     catalogue_id: int
-    developer_name: str
-    description: str
+    developer_name: Optional[str]
+    description: Optional[str]
     priority: int
 
 
@@ -113,10 +113,20 @@ class AppOutSchema(BaseModel):
     name: str
     name_en: str
     catalogue_id: int
-    developer_name: str
-    description: str
+    developer_name: Optional[str]
+    description: Optional[str]
     priority: int
 
 
 class AppPageSchemaList(BasePageSchema):
     items: List[AppOutSchema]
+
+
+class AppQuerySearchSchema(BaseModel):
+    keyword: Optional[str] = None
+    count: int = Field(5, gt=0, lt=16, description="0 < count < 16")
+    page: int = 0
+
+    @staticmethod
+    def offset_handler(req, resp, req_validation_error, instance):
+        g.offset = req.context.query.count * req.context.query.page
