@@ -31,7 +31,7 @@ class LogQuerySearchSchema(BaseModel):
     page: int = 0
 
     @validator("start", "end")
-    def datetime_match(cls, v, values, **kwargs):
+    def datetime_match(self, v, values, **kwargs):
         if re.match(datetime_regex, v):
             return v
         raise ValueError("时间格式有误")
@@ -130,3 +130,14 @@ class AppQuerySearchSchema(BaseModel):
     @staticmethod
     def offset_handler(req, resp, req_validation_error, instance):
         g.offset = req.context.query.count * req.context.query.page
+
+
+class AppRelOutSchema(BaseModel):
+    id: int
+    package_name: str
+    launch_name: Optional[str]
+    app_id: int
+
+
+class AppRelSchemaList(BaseModel):
+    __root__: List[AppRelOutSchema]

@@ -10,9 +10,10 @@ from sqlalchemy import text
 
 from app.exception.api import CatalogueNotFound, AppNotFound
 from app.model.icon_manager.app_model import App
+from app.model.icon_manager.app_rel_model import AppRel
 from app.model.icon_manager.catalogue_model import Catalogue
 from app.validator.schema import CatalogueOutSchema, CatalogueSchemaList, AppOutSchema, AuthorizationSchema, \
-    AppInSchema, AppPageSchemaList, AppQuerySearchSchema
+    AppInSchema, AppPageSchemaList, AppQuerySearchSchema, AppRelSchemaList
 
 app_api = Redprint('app')
 
@@ -20,9 +21,12 @@ app_api = Redprint('app')
 @app_api.route('/catalogue/<c_id>')
 @api.validate(
     resp=DocResponse(CatalogueNotFound, r=CatalogueOutSchema),
-    tags=['分类'],
+    tags=['App'],
 )
 def get_catalogue(c_id: int):
+    """
+    获取id指定分类的信息
+    """
     c: Catalogue = Catalogue.get(id=c_id)
     if c:
         return c
@@ -32,10 +36,25 @@ def get_catalogue(c_id: int):
 @app_api.route("/catalogue")
 @api.validate(
     resp=DocResponse(r=CatalogueSchemaList),
-    tags=["分类"],
+    tags=["App"],
 )
 def get_catalogues():
+    """
+    获取分类列表
+    """
     return Catalogue.get(one=False)
+
+
+@app_api.route('/app_rel/<app_id>')
+@api.validate(
+    resp=DocResponse(r=AppRelSchemaList),
+    tags=['App'],
+)
+def get_app_rels(app_id):
+    """
+    获取id指定App下所有发行版的信息
+    """
+    return AppRel.get(app_id=app_id, one=False)
 
 
 @app_api.route('/<app_id>')
