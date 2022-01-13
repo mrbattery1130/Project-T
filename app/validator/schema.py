@@ -97,3 +97,26 @@ class CatalogueOutSchema(BaseModel):
 
 class CatalogueSchemaList(BaseModel):
     __root__: List[CatalogueOutSchema]
+
+
+class AppInSchema(BaseModel):
+    name: str
+    name_en: str
+    catalogue_id: int
+    developer_name: str
+    description: str
+    priority: int
+
+
+class AppOutSchema(BaseModel):
+    id: int
+    name: str
+    name_en: str
+    catalogue_id: int
+    developer_name: str
+    description: str
+    priority: int
+
+
+class AppPageSchemaList(BasePageSchema):
+    items: List[AppOutSchema]

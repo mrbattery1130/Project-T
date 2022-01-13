@@ -21,3 +21,8 @@ class RefreshFailed(Failed):
 class CatalogueNotFound(NotFound):
     message = "分类不存在"
     _config = False
+
+
+class AppNotFound(NotFound):
+    message = "App不存在"
+    _config = False
