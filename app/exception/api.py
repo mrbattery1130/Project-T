@@ -38,6 +38,6 @@ class IconNotFound(NotFound):
     _config = False
 
 
-class IconpackNotFound:
-    message = "图标不存在"
+class IconpackNotFound(NotFound):
+    message = "图标包不存在"
     _config = False

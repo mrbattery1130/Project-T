@@ -43,7 +43,7 @@ def get_iconpacks():
 @api.validate(
     headers=AuthorizationSchema,
     json=IconpackInSchema,
-    resp=DocResponse(Success(16)),
+    resp=DocResponse(Success(25)),
     tags=["图标包"],
 )
 def create_iconpack():
@@ -52,7 +52,7 @@ def create_iconpack():
     """
     iconpack_schema = request.context.json
     Iconpack.create(**iconpack_schema.dict(), commit=True)
-    return Success(16)
+    return Success(25)
 
 
 @iconpack_api.route("/<iconpack_id>", methods=["PUT"])
@@ -60,7 +60,7 @@ def create_iconpack():
 @api.validate(
     headers=AuthorizationSchema,
     json=IconpackInSchema,
-    resp=DocResponse(Success(17)),
+    resp=DocResponse(Success(26)),
     tags=["图标包"],
 )
 def update_iconpack(iconpack_id):
@@ -75,7 +75,7 @@ def update_iconpack(iconpack_id):
             **iconpack_schema.dict(),
             commit=True,
         )
-        return Success(17)
+        return Success(26)
     raise IconpackNotFound
 
 
@@ -85,7 +85,7 @@ def update_iconpack(iconpack_id):
 @login_required
 @api.validate(
     headers=AuthorizationSchema,
-    resp=DocResponse(IconpackNotFound, Success(18)),
+    resp=DocResponse(IconpackNotFound, Success(27)),
     tags=["图标包"],
 )
 def delete_iconpack(iconpack_id):
@@ -96,5 +96,5 @@ def delete_iconpack(iconpack_id):
     if iconpack:
         # 删除图标包，软删除
         iconpack.delete(commit=True)
-        return Success(18)
+        return Success(27)
     raise IconpackNotFound
