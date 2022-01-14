@@ -157,8 +157,19 @@ class PackageNameQuerySearchSchema(BaseModel):
     app_name: Optional[str] = str()
 
 
+class IconInSchema(BaseModel):
+    id: int
+    url: str
+    iconpack_id: int
+    app_id: int
+
+
 class IconOutSchema(BaseModel):
     id: int
     url: str
     iconpack_id: int
     app_id: int
+
+
+class IconSchemaList(BaseModel):
+    __root__: List[IconOutSchema]
