@@ -77,8 +77,7 @@ if app.config.get("ENV") != "production":
                 <br />
                 <span style="font-size:30px">
                     <a href="/apidoc/redoc">redoc</a>
-                </span>
-                <span style="font-size:30px">
+                    <br />
                     <a href="/apidoc/swagger">swagger</a>
                 </span>
             </p>
