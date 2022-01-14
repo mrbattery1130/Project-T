@@ -147,3 +147,11 @@ class AppRelOutSchema(BaseModel):
 
 class AppRelSchemaList(BaseModel):
     __root__: List[AppRelOutSchema]
+
+
+class AppIconQuerySearchSchema(BaseModel):
+    package_name: Optional[str] = str()
+
+
+class PackageNameQuerySearchSchema(BaseModel):
+    app_name: Optional[str] = str()
