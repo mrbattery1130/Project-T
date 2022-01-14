@@ -5,3 +5,4 @@ gevent==20.9.0
 gunicorn==20.0.4
 beautifulsoup4==4.10.0
 grequests==0.6.0
+lxml==4.7.1
