@@ -73,10 +73,13 @@ if app.config.get("ENV") != "production":
         </style>
         <div style="padding: 24px 48px;">
             <p>
-                <a href="https://www.talelin.com" target="_Blank">Lin</a>
+                <a href="https://www.talelin.com" target="_Blank">Project-T</a>
                 <br />
                 <span style="font-size:30px">
-                    <a href="/apidoc/redoc">Hello Project-T!</a>
+                    <a href="/apidoc/redoc">redoc</a>
+                </span>
+                <span style="font-size:30px">
+                    <a href="/apidoc/swagger">swagger</a>
                 </span>
             </p>
         </div>
