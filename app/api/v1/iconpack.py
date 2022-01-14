@@ -80,7 +80,7 @@ def update_iconpack(iconpack_id):
 
 
 @iconpack_api.route("/<iconpack_id>", methods=["DELETE"])
-# @permission_meta(name="删除图标包", module="图标包")
+# @permission_meta(name="删除图标包", module="图标")
 # @group_required
 @login_required
 @api.validate(
