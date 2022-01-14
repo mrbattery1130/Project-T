@@ -31,3 +31,8 @@ class AppNotFound(NotFound):
 class AppRelNotFound(NotFound):
     message = "App发行版不存在"
     _config = False
+
+
+class IconNotFound(NotFound):
+    message = "图标不存在"
+    _config = False
