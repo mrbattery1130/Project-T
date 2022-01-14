@@ -8,12 +8,12 @@ from lin.jwt import login_required, group_required
 from lin.redprint import Redprint
 from sqlalchemy import text
 
-from app.exception.api import CatalogueNotFound, AppNotFound
+from app.exception.api import CatalogueNotFound, AppNotFound, AppRelNotFound
 from app.model.icon_manager.app_model import App
 from app.model.icon_manager.app_rel_model import AppRel
 from app.model.icon_manager.catalogue_model import Catalogue
 from app.validator.schema import CatalogueOutSchema, CatalogueSchemaList, AppOutSchema, AuthorizationSchema, \
-    AppInSchema, AppPageSchemaList, AppQuerySearchSchema, AppRelSchemaList
+    AppInSchema, AppPageSchemaList, AppQuerySearchSchema, AppRelSchemaList, AppRelInSchema
 
 app_api = Redprint('app')
 
@@ -43,18 +43,6 @@ def get_catalogues():
     获取分类列表
     """
     return Catalogue.get(one=False)
-
-
-@app_api.route('/app_rel/<app_id>')
-@api.validate(
-    resp=DocResponse(r=AppRelSchemaList),
-    tags=['App'],
-)
-def get_app_rels(app_id):
-    """
-    获取id指定App下所有发行版的信息
-    """
-    return AppRel.get(app_id=app_id, one=False)
 
 
 @app_api.route('/<app_id>')
@@ -151,7 +139,7 @@ def update_app(app_id):
     resp=DocResponse(AppNotFound, Success(18)),
     tags=["App"],
 )
-def delete_book(app_id):
+def delete_app(app_id):
     """
     传入id删除对应App
     """
@@ -161,3 +149,77 @@ def delete_book(app_id):
         app.delete(commit=True)
         return Success(18)
     raise AppNotFound
+
+
+@app_api.route('/app_rel/<app_id>')
+@api.validate(
+    resp=DocResponse(r=AppRelSchemaList),
+    tags=['App'],
+)
+def get_app_rels(app_id):
+    """
+    获取id指定App下所有发行版的信息
+    """
+    return AppRel.get(app_id=app_id, one=False)
+
+
+@app_api.route("/app_rel", methods=["POST"])
+@login_required
+@api.validate(
+    headers=AuthorizationSchema,
+    json=AppRelInSchema,
+    resp=DocResponse(Success(19)),
+    tags=["App"],
+)
+def create_app_rel():
+    """
+    创建App发行版
+    """
+    app_rel_schema = request.context.json
+    AppRel.create(**app_rel_schema.dict(), commit=True)
+    return Success(19)
+
+
+@app_api.route("/app_rel/<app_rel_id>", methods=["PUT"])
+@login_required
+@api.validate(
+    headers=AuthorizationSchema,
+    json=AppRelInSchema,
+    resp=DocResponse(Success(20)),
+    tags=["App"],
+)
+def update_app(app_rel_id):
+    """
+    更新App发行版信息
+    """
+    app_rel_schema = request.context.json
+    app_rel = App.get(id=app_rel_id)
+    if app_rel:
+        app_rel.update(
+            id=app_rel_id,
+            **app_rel_schema.dict(),
+            commit=True,
+        )
+        return Success(20)
+    raise AppRelNotFound
+
+
+@app_api.route("/app_rel/<app_rel_id>", methods=["DELETE"])
+# @permission_meta(name="删除App发行版", module="App")
+# @group_required
+@login_required
+@api.validate(
+    headers=AuthorizationSchema,
+    resp=DocResponse(AppNotFound, Success(21)),
+    tags=["App"],
+)
+def delete_app__rel(app_rel_id):
+    """
+    传入id删除对应App发行版
+    """
+    app_rel = AppRel.get(id=app_rel_id)
+    if app_rel:
+        # 删除App，软删除
+        app_rel.delete(commit=True)
+        return Success(21)
+    raise AppRelNotFound

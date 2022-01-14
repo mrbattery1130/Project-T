@@ -26,3 +26,8 @@ class CatalogueNotFound(NotFound):
 class AppNotFound(NotFound):
     message = "App不存在"
     _config = False
+
+
+class AppRelNotFound(NotFound):
+    message = "App发行版不存在"
+    _config = False
