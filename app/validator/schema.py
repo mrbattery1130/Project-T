@@ -188,3 +188,26 @@ class IconpackOutSchema:
 
 class IconpackSchemaList:
     __root__: List[IconpackOutSchema]
+
+
+class IconSpiderOutSchema(BaseModel):
+    app_store: str
+    app_name: str
+    app_icon_url: str
+    app_url: str
+
+
+class IconSpiderOutListSchema(BaseModel):
+    app_icons: List[IconSpiderOutSchema]
+    package_name: str
+
+
+class PackageNameSpiderOutSchema(BaseModel):
+    app_store: str
+    package_name: str
+    app_name: str
+    app_icon_url: str
+
+
+class PackageNameSpiderOutListSchema(BaseModel):
+    __root__: List[PackageNameSpiderOutSchema]
