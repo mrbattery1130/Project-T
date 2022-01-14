@@ -188,7 +188,7 @@ def create_app_rel():
     resp=DocResponse(Success(20)),
     tags=["App"],
 )
-def update_app(app_rel_id):
+def update_app_rel(app_rel_id):
     """
     更新App发行版信息
     """
@@ -213,7 +213,7 @@ def update_app(app_rel_id):
     resp=DocResponse(AppNotFound, Success(21)),
     tags=["App"],
 )
-def delete_app__rel(app_rel_id):
+def delete_app_rel(app_rel_id):
     """
     传入id删除对应App发行版
     """
