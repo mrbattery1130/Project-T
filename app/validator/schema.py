@@ -103,8 +103,8 @@ class AppInSchema(BaseModel):
     name: str
     name_en: str
     catalogue_id: int
-    developer_name: Optional[str]
-    description: Optional[str]
+    developer_name: Optional[str] = None
+    description: Optional[str] = None
     priority: int
 
 
@@ -113,8 +113,8 @@ class AppOutSchema(BaseModel):
     name: str
     name_en: str
     catalogue_id: int
-    developer_name: Optional[str]
-    description: Optional[str]
+    developer_name: Optional[str] = None
+    description: Optional[str] = None
     priority: int
 
 
@@ -134,14 +134,14 @@ class AppQuerySearchSchema(BaseModel):
 
 class AppRelInSchema(BaseModel):
     package_name: str
-    launch_name: Optional[str]
+    launch_name: Optional[str] = None
     app_id: int
 
 
 class AppRelOutSchema(BaseModel):
     id: int
     package_name: str
-    launch_name: Optional[str]
+    launch_name: Optional[str] = None
     app_id: int
 
 
@@ -150,11 +150,11 @@ class AppRelSchemaList(BaseModel):
 
 
 class AppIconQuerySearchSchema(BaseModel):
-    package_name: Optional[str] = str()
+    package_name: Optional[str] = None
 
 
 class PackageNameQuerySearchSchema(BaseModel):
-    app_name: Optional[str] = str()
+    app_name: Optional[str] = None
 
 
 class IconInSchema(BaseModel):
@@ -177,13 +177,13 @@ class IconSchemaList(BaseModel):
 
 class IconpackInSchema(BaseModel):
     name: str
-    description: Optional[str]
+    description: Optional[str] = None
 
 
 class IconpackOutSchema(BaseModel):
     id: int
     name: str
-    description: Optional[str]
+    description: Optional[str] = None
 
 
 class IconpackSchemaList(BaseModel):
