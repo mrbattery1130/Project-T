@@ -173,3 +173,18 @@ class IconOutSchema(BaseModel):
 
 class IconSchemaList(BaseModel):
     __root__: List[IconOutSchema]
+
+
+class IconpackInSchema:
+    name: str
+    description: Optional[str]
+
+
+class IconpackOutSchema:
+    id: int
+    name: str
+    description: Optional[str]
+
+
+class IconpackSchemaList:
+    __root__: List[IconpackOutSchema]

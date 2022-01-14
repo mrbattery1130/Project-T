@@ -36,3 +36,8 @@ class AppRelNotFound(NotFound):
 class IconNotFound(NotFound):
     message = "图标不存在"
     _config = False
+
+
+class IconpackNotFound:
+    message = "图标不存在"
+    _config = False
