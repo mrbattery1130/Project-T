@@ -116,6 +116,7 @@ class AppOutSchema(BaseModel):
     developer_name: Optional[str] = None
     description: Optional[str] = None
     priority: int
+    catalogue: Optional[CatalogueOutSchema] = None
 
 
 class AppPageSchemaList(BasePageSchema):
