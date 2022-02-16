@@ -151,12 +151,24 @@ def delete_app(app_id):
     raise AppNotFound
 
 
-@app_api.route('/app_rel/<app_id>')
+@app_api.route('/app_rel/<app_rel_id>')
 @api.validate(
     resp=DocResponse(r=AppRelSchemaList),
     tags=['App'],
 )
-def get_app_rels(app_id):
+def get_app_rel(app_rel_id):
+    """
+    获取id指定App发行版的信息
+    """
+    return AppRel.get(id=app_rel_id, one=True)
+
+
+@app_api.route('/app_rels_by_app/<app_id>')
+@api.validate(
+    resp=DocResponse(r=AppRelSchemaList),
+    tags=['App'],
+)
+def get_app_rels_by_app(app_id):
     """
     获取id指定App下所有发行版的信息
     """
