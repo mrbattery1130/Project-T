@@ -5,7 +5,7 @@ from lin.jwt import login_required
 from lin.redprint import Redprint
 
 from app.exception.api import IconNotFound
-from app.model.icon_manager.icon_model import Icon
+from app.api.v1.model.icon_model import Icon
 from app.validator.schema import IconOutSchema, IconSchemaList, AuthorizationSchema, IconInSchema
 
 icon_api = Redprint('icon')
@@ -41,7 +41,7 @@ def get_icons():
 @icon_api.route("", methods=["POST"])
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     json=IconInSchema,
     resp=DocResponse(Success(22)),
     tags=["图标"],
@@ -58,7 +58,7 @@ def create_icon():
 @icon_api.route("/<icon_id>", methods=["PUT"])
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     json=IconInSchema,
     resp=DocResponse(Success(23)),
     tags=["图标"],
@@ -84,7 +84,7 @@ def update_icon(icon_id):
 # @group_required
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     resp=DocResponse(IconNotFound, Success(24)),
     tags=["图标"],
 )

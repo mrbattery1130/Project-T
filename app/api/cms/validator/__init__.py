@@ -5,9 +5,7 @@
 import re
 import time
 
-from lin import manager
-from lin.exception import ParameterError
-from lin.form import Form
+from lin import Form, ParameterError, manager
 from wtforms import DateTimeField, FieldList, IntegerField, PasswordField, StringField
 from wtforms.validators import DataRequired, EqualTo, NumberRange, Regexp, length
 
@@ -66,6 +64,7 @@ class RegisterForm(EmailForm):
 class LoginForm(Form):
     username = StringField(validators=[DataRequired()])
     password = PasswordField("密码", validators=[DataRequired(message="密码不可为空")])
+    captcha = StringField()
 
 
 # 重置密码校验

@@ -1,21 +1,20 @@
 import math
 
-from flask import request, g
-from lin import permission_meta
+from flask import request, g, Blueprint
 from lin.apidoc import api, DocResponse
 from lin.exception import Success
-from lin.jwt import login_required, group_required
-from lin.redprint import Redprint
+from lin.jwt import login_required
 from sqlalchemy import text
 
 from app.exception.api import CatalogueNotFound, AppNotFound, AppRelNotFound
-from app.model.icon_manager.app_model import App
-from app.model.icon_manager.app_rel_model import AppRel
-from app.model.icon_manager.catalogue_model import Catalogue
-from app.validator.schema import CatalogueOutSchema, CatalogueSchemaList, AppOutSchema, AuthorizationSchema, \
-    AppInSchema, AppPageSchemaList, AppQuerySearchSchema, AppRelSchemaList, AppRelInSchema
 
-app_api = Redprint('app')
+from app.api import AuthorizationBearerSecurity
+from app.api.v1.model.app_model import App
+from app.api.v1.model.app_rel_model import AppRel
+from app.api.v1.model.catalogue_model import Catalogue
+from app.api.v1.schema import *
+
+app_api = Blueprint('app', __name__)
 
 
 @app_api.route('/catalogue/<c_id>')
@@ -62,7 +61,7 @@ def get_app(app_id):
 
 @app_api.route('')
 @api.validate(
-    # headers=AuthorizationSchema,
+    # security=[AuthorizationBearerSecurity],
     query=AppQuerySearchSchema,
     resp=DocResponse(r=AppPageSchemaList),
     before=AppQuerySearchSchema.offset_handler,
@@ -92,12 +91,11 @@ def get_apps():
 @app_api.route("", methods=["POST"])
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
-    json=AppInSchema,
+    security=[AuthorizationBearerSecurity],
     resp=DocResponse(Success(16)),
     tags=["App"],
 )
-def create_app():
+def create_app(json: AppInSchema):
     """
     创建App
     """
@@ -109,7 +107,7 @@ def create_app():
 @app_api.route("/<app_id>", methods=["PUT"])
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     json=AppInSchema,
     resp=DocResponse(Success(17)),
     tags=["App"],
@@ -135,7 +133,7 @@ def update_app(app_id):
 # @group_required
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     resp=DocResponse(AppNotFound, Success(18)),
     tags=["App"],
 )
@@ -178,7 +176,7 @@ def get_app_rels_by_app(app_id):
 @app_api.route("/app_rel", methods=["POST"])
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     json=AppRelInSchema,
     resp=DocResponse(Success(19)),
     tags=["App"],
@@ -195,7 +193,7 @@ def create_app_rel():
 @app_api.route("/app_rel/<app_rel_id>", methods=["PUT"])
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     json=AppRelInSchema,
     resp=DocResponse(Success(20)),
     tags=["App"],
@@ -221,7 +219,7 @@ def update_app_rel(app_rel_id):
 # @group_required
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     resp=DocResponse(AppNotFound, Success(21)),
     tags=["App"],
 )

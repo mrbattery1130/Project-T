@@ -6,7 +6,7 @@ from typing import List
 
 from lin.db import db
 
-from app.model.icon_manager.catalogue_model import Catalogue
+from app.api.v1.model.catalogue_model import Catalogue
 
 names: List[str] = [
     '交通位置',

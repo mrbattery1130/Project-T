@@ -2,7 +2,7 @@ from flask import jsonify, g
 from lin.apidoc import api, DocResponse
 from lin.redprint import Redprint
 
-from app.model.icon_manager.icon_spider import AppIconSpider
+from app.api.v1.model.icon_spider import AppIconSpider
 from app.validator.schema import AppIconQuerySearchSchema, PackageNameQuerySearchSchema, IconSpiderOutListSchema, \
     PackageNameSpiderOutListSchema
 

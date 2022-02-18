@@ -1,7 +1,7 @@
 from lin.interface import InfoCrud as Base
 from sqlalchemy import Column, String, Integer
 
-from app.model.icon_manager.catalogue_model import Catalogue
+from app.api.v1.model.catalogue_model import Catalogue
 
 
 class App(Base):

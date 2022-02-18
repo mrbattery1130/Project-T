@@ -5,7 +5,7 @@ from lin.jwt import login_required
 from lin.redprint import Redprint
 
 from app.exception.api import IconpackNotFound
-from app.model.icon_manager.iconpack_model import Iconpack
+from app.api.v1.model.iconpack_model import Iconpack
 from app.validator.schema import IconpackOutSchema, IconpackSchemaList, AuthorizationSchema, IconpackInSchema
 
 iconpack_api = Redprint('iconpack')
@@ -41,7 +41,7 @@ def get_iconpacks():
 @iconpack_api.route("", methods=["POST"])
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     json=IconpackInSchema,
     resp=DocResponse(Success(25)),
     tags=["图标包"],
@@ -58,7 +58,7 @@ def create_iconpack():
 @iconpack_api.route("/<iconpack_id>", methods=["PUT"])
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     json=IconpackInSchema,
     resp=DocResponse(Success(26)),
     tags=["图标包"],
@@ -84,7 +84,7 @@ def update_iconpack(iconpack_id):
 # @group_required
 @login_required
 @api.validate(
-    headers=AuthorizationSchema,
+    security=[AuthorizationBearerSecurity],
     resp=DocResponse(IconpackNotFound, Success(27)),
     tags=["图标包"],
 )

@@ -19,7 +19,6 @@ class BaseConfig(object):
 
     # 指定访问api服务的url, 用于文件上传
     # SITE_DOMAIN="https://lincms.example.com"
-    SITE_DOMAIN = os.getenv("SITE_DOMAIN","")
 
     # 指定数据库
     SQLALCHEMY_DATABASE_URI = os.getenv(
@@ -32,6 +31,9 @@ class BaseConfig(object):
 
     # 令牌配置
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+
+    # 登录验证码
+    LOGIN_CAPTCHA = False
 
     # 默认文件上传配置
     FILE = {
