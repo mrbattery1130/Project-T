@@ -40,6 +40,23 @@ class CatalogueSchemaList(BaseModel):
     __root__: List[CatalogueOutSchema]
 
 
+class AppRelInSchema(BaseModel):
+    package_name: str
+    launch_name: Optional[str] = None
+    app_id: int
+
+
+class AppRelOutSchema(BaseModel):
+    id: int
+    package_name: str
+    launch_name: Optional[str] = None
+    app_id: int
+
+
+class AppRelSchemaList(BaseModel):
+    __root__: List[AppRelOutSchema]
+
+
 class AppInSchema(BaseModel):
     name: str
     name_en: str
@@ -58,6 +75,7 @@ class AppOutSchema(BaseModel):
     description: Optional[str] = None
     priority: int
     catalogue: Optional[CatalogueOutSchema] = None
+    app_rels: Optional[List[AppRelOutSchema]] = None
 
 
 class AppPageSchemaList(BasePageSchema):
@@ -72,23 +90,6 @@ class AppQuerySearchSchema(BaseModel):
     @staticmethod
     def offset_handler(req, resp, req_validation_error, instance):
         g.offset = req.context.query.count * req.context.query.page
-
-
-class AppRelInSchema(BaseModel):
-    package_name: str
-    launch_name: Optional[str] = None
-    app_id: int
-
-
-class AppRelOutSchema(BaseModel):
-    id: int
-    package_name: str
-    launch_name: Optional[str] = None
-    app_id: int
-
-
-class AppRelSchemaList(BaseModel):
-    __root__: List[AppRelOutSchema]
 
 
 class AppIconQuerySearchSchema(BaseModel):
