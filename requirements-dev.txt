@@ -16,6 +16,3 @@ pytest==6.2.5
 pre-commit==2.16.0
 pytest-ordering==0.6
 flake8==4.0.1
-beautifulsoup4==4.10.0
-grequests==0.6.0
-lxml==4.7.1
