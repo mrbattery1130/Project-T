@@ -1,14 +1,14 @@
-from flask import request
-from lin.apidoc import api, DocResponse
+from flask import Blueprint
+from lin.apidoc import DocResponse
 from lin.exception import Success
 from lin.jwt import login_required
-from lin.redprint import Redprint
 
-from app.exception.api import IconpackNotFound
+from app.api import api, AuthorizationBearerSecurity
+from app.api.v1.exception import IconpackNotFound
 from app.api.v1.model.iconpack_model import Iconpack
-from app.validator.schema import IconpackOutSchema, IconpackSchemaList, AuthorizationSchema, IconpackInSchema
+from app.api.v1.schema import IconpackOutSchema, IconpackSchemaList, IconpackInSchema
 
-iconpack_api = Redprint('iconpack')
+iconpack_api = Blueprint('iconpack', __name__)
 
 
 @iconpack_api.route('/<iconpack_id>')
@@ -42,16 +42,14 @@ def get_iconpacks():
 @login_required
 @api.validate(
     security=[AuthorizationBearerSecurity],
-    json=IconpackInSchema,
     resp=DocResponse(Success(25)),
     tags=["图标包"],
 )
-def create_iconpack():
+def create_iconpack(json: IconpackInSchema):
     """
     创建图标包
     """
-    iconpack_schema = request.context.json
-    Iconpack.create(**iconpack_schema.dict(), commit=True)
+    Iconpack.create(**json.dict(), commit=True)
     return Success(25)
 
 
@@ -59,20 +57,18 @@ def create_iconpack():
 @login_required
 @api.validate(
     security=[AuthorizationBearerSecurity],
-    json=IconpackInSchema,
     resp=DocResponse(Success(26)),
     tags=["图标包"],
 )
-def update_iconpack(iconpack_id):
+def update_iconpack(iconpack_id, json: IconpackInSchema):
     """
     更新图标包信息
     """
-    iconpack_schema = request.context.json
     iconpack = Iconpack.get(id=iconpack_id)
     if iconpack:
         iconpack.update(
             id=iconpack_id,
-            **iconpack_schema.dict(),
+            **json.dict(),
             commit=True,
         )
         return Success(26)

@@ -1,12 +1,12 @@
-from flask import jsonify, g
-from lin.apidoc import api, DocResponse
-from lin.redprint import Redprint
+from flask import jsonify, g, Blueprint
+from lin.apidoc import DocResponse
 
+from app.api import api
 from app.api.v1.model.icon_spider import AppIconSpider
-from app.validator.schema import AppIconQuerySearchSchema, PackageNameQuerySearchSchema, IconSpiderOutListSchema, \
-    PackageNameSpiderOutListSchema
+from app.api.v1.schema import AppIconQuerySearchSchema, IconSpiderOutListSchema, \
+    PackageNameQuerySearchSchema, PackageNameSpiderOutListSchema
 
-icon_util_api = Redprint('icon_util')
+icon_util_api = Blueprint('icon_util', __name__)
 
 
 @icon_util_api.route('/search', methods=['GET'])

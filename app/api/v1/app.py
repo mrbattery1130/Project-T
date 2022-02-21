@@ -1,14 +1,14 @@
 import math
 
-from flask import request, g, Blueprint
-from lin.apidoc import api, DocResponse
+from flask import Blueprint
+from lin.apidoc import DocResponse
 from lin.exception import Success
 from lin.jwt import login_required
 from sqlalchemy import text
 
-from app.exception.api import CatalogueNotFound, AppNotFound, AppRelNotFound
+from app.api.v1.exception import CatalogueNotFound, AppNotFound, AppRelNotFound
 
-from app.api import AuthorizationBearerSecurity
+from app.api import AuthorizationBearerSecurity, api
 from app.api.v1.model.app_model import App
 from app.api.v1.model.app_rel_model import AppRel
 from app.api.v1.model.catalogue_model import Catalogue
@@ -99,8 +99,7 @@ def create_app(json: AppInSchema):
     """
     创建App
     """
-    app_schema = request.context.json
-    App.create(**app_schema.dict(), commit=True)
+    App.create(**json.dict(), commit=True)
     return Success(16)
 
 
@@ -108,20 +107,18 @@ def create_app(json: AppInSchema):
 @login_required
 @api.validate(
     security=[AuthorizationBearerSecurity],
-    json=AppInSchema,
     resp=DocResponse(Success(17)),
     tags=["App"],
 )
-def update_app(app_id):
+def update_app(app_id, json: AppInSchema):
     """
     更新App信息
     """
-    app_schema = request.context.json
     app = App.get(id=app_id)
     if app:
         app.update(
             id=app_id,
-            **app_schema.dict(),
+            **json.dict(),
             commit=True,
         )
         return Success(17)
@@ -177,16 +174,14 @@ def get_app_rels_by_app(app_id):
 @login_required
 @api.validate(
     security=[AuthorizationBearerSecurity],
-    json=AppRelInSchema,
     resp=DocResponse(Success(19)),
     tags=["App"],
 )
-def create_app_rel():
+def create_app_rel(json: AppRelInSchema):
     """
     创建App发行版
     """
-    app_rel_schema = request.context.json
-    AppRel.create(**app_rel_schema.dict(), commit=True)
+    AppRel.create(**json.dict(), commit=True)
     return Success(19)
 
 
@@ -194,20 +189,18 @@ def create_app_rel():
 @login_required
 @api.validate(
     security=[AuthorizationBearerSecurity],
-    json=AppRelInSchema,
     resp=DocResponse(Success(20)),
     tags=["App"],
 )
-def update_app_rel(app_rel_id):
+def update_app_rel(app_rel_id, json: AppRelInSchema):
     """
     更新App发行版信息
     """
-    app_rel_schema = request.context.json
     app_rel = App.get(id=app_rel_id)
     if app_rel:
         app_rel.update(
             id=app_rel_id,
-            **app_rel_schema.dict(),
+            **json.dict(),
             commit=True,
         )
         return Success(20)

@@ -1,14 +1,14 @@
-from flask import request
-from lin.apidoc import api, DocResponse
+from flask import Blueprint
+from lin.apidoc import DocResponse
 from lin.exception import Success
 from lin.jwt import login_required
-from lin.redprint import Redprint
 
-from app.exception.api import IconNotFound
+from app.api import api, AuthorizationBearerSecurity
+from app.api.v1.exception import IconNotFound
 from app.api.v1.model.icon_model import Icon
-from app.validator.schema import IconOutSchema, IconSchemaList, AuthorizationSchema, IconInSchema
+from app.api.v1.schema import IconOutSchema, IconInSchema, IconSchemaList
 
-icon_api = Redprint('icon')
+icon_api = Blueprint('icon', __name__)
 
 
 @icon_api.route('/<icon_id>')
@@ -42,16 +42,14 @@ def get_icons():
 @login_required
 @api.validate(
     security=[AuthorizationBearerSecurity],
-    json=IconInSchema,
     resp=DocResponse(Success(22)),
     tags=["图标"],
 )
-def create_icon():
+def create_icon(json: IconInSchema):
     """
     创建图标
     """
-    icon_schema = request.context.json
-    Icon.create(**icon_schema.dict(), commit=True)
+    Icon.create(**json.dict(), commit=True)
     return Success(22)
 
 
@@ -59,20 +57,18 @@ def create_icon():
 @login_required
 @api.validate(
     security=[AuthorizationBearerSecurity],
-    json=IconInSchema,
     resp=DocResponse(Success(23)),
     tags=["图标"],
 )
-def update_icon(icon_id):
+def update_icon(icon_id, json: IconInSchema):
     """
     更新图标信息
     """
-    icon_schema = request.context.json
     icon = Icon.get(id=icon_id)
     if icon:
         icon.update(
             id=icon_id,
-            **icon_schema.dict(),
+            **json.dict(),
             commit=True,
         )
         return Success(23)
