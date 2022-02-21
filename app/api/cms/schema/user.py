@@ -2,7 +2,7 @@ import re
 from typing import List, Optional
 
 from lin import BaseModel, ParameterError
-from pydantic import AnyHttpUrl, Field, validator
+from pydantic import Field, validator
 
 from . import EmailSchema, GroupIdListSchema, ResetPasswordSchema
 
@@ -33,7 +33,7 @@ class PermissionModuleSchema(BaseModel):
 
 class UserBaseInfoSchema(EmailSchema):
     nickname: Optional[str] = Field(description="用户昵称", min_length=2, max_length=10)
-    avatar: Optional[AnyHttpUrl] = Field(description="头像url")
+    avatar: Optional[str] = Field(description="头像url")
 
 
 class UserSchema(UserBaseInfoSchema):

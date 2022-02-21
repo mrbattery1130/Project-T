@@ -19,6 +19,7 @@ class BaseConfig(object):
 
     # 指定访问api服务的url, 用于文件上传
     # SITE_DOMAIN="https://lincms.example.com"
+    SITE_DOMAIN = os.getenv("SITE_DOMAIN", "")
 
     # 指定数据库
     SQLALCHEMY_DATABASE_URI = os.getenv(
