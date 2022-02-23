@@ -75,6 +75,7 @@ class AppOutSchema(BaseModel):
     description: Optional[str] = None
     priority: int
     catalogue: Optional[CatalogueOutSchema] = None
+    package_names: Optional[List[str]] = None
     app_rels: Optional[List[AppRelOutSchema]] = None
 
 
