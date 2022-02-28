@@ -77,7 +77,7 @@ def get_apps():
     获取App列表，分页展示
     """
     # return App.get(one=False)
-    apps = App.query.filter()
+    apps = App.query.filter(App.is_deleted == False)
     total = apps.count()
     items = (
         apps.order_by(text("create_time desc")).offset(g.offset).limit(g.count).all()
