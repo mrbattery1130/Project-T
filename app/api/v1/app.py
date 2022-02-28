@@ -166,7 +166,7 @@ def delete_app(app_id):
 
 @app_api.route('/app_rel/<app_rel_id>')
 @api.validate(
-    resp=DocResponse(r=AppRelSchemaList),
+    resp=DocResponse(r=AppRelOutSchema),
     tags=['App'],
 )
 def get_app_rel(app_rel_id):
