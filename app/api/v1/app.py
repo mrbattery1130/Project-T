@@ -110,15 +110,17 @@ def get_apps():
 @login_required
 @api.validate(
     security=[AuthorizationBearerSecurity],
-    resp=DocResponse(Success(16)),
+    # resp=DocResponse(Success(16)),
+    resp=DocResponse(r=AppOutSchema),
     tags=["App"],
 )
 def create_app(json: AppInSchema):
     """
     创建App
     """
-    App.create(**json.dict(), commit=True)
-    return Success(16)
+    one = App.create(**json.dict(), commit=True)
+    # return Success(16)
+    return one
 
 
 @app_api.route("/<app_id>", methods=["PUT"])
