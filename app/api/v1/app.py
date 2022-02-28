@@ -216,7 +216,7 @@ def update_app_rel(app_rel_id, json: AppRelInSchema):
     """
     更新App发行版信息
     """
-    app_rel = App.get(id=app_rel_id)
+    app_rel = AppRel.get(id=app_rel_id)
     if app_rel:
         app_rel.update(
             id=app_rel_id,
