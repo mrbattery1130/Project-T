@@ -114,7 +114,7 @@ class IconQuerySearchSchema(BaseModel):
 
 class IconInSchema(BaseModel):
     id: int
-    url: str
+    url: Optional[str]
     iconpack_id: int
     app_id: int
 
