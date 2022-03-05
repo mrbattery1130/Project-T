@@ -1,12 +1,17 @@
-from flask import Blueprint
+import math
+
+from flask import Blueprint, g
 from lin.apidoc import DocResponse
 from lin.exception import Success
 from lin.jwt import login_required
+from sqlalchemy import text
 
 from app.api import api, AuthorizationBearerSecurity
 from app.api.v1.exception import IconNotFound
+from app.api.v1.model.app_model import App
 from app.api.v1.model.icon_model import Icon
-from app.api.v1.schema import IconOutSchema, IconInSchema, IconSchemaList
+from app.api.v1.schema import IconOutSchema, IconInSchema, IconSchemaList, IconQuerySearchSchema, \
+    IconPageSchemaList
 
 icon_api = Blueprint('icon', __name__)
 
@@ -28,14 +33,35 @@ def get_icon(icon_id):
 
 @icon_api.route('')
 @api.validate(
-    resp=DocResponse(r=IconSchemaList),
+    query=IconQuerySearchSchema,
+    resp=DocResponse(r=IconPageSchemaList),
+    before=IconQuerySearchSchema.offset_handler,
     tags=["图标"],
 )
 def get_icons():
     """
     获取图标列表，分页展示
     """
-    return Icon.get(one=False)
+    # return Icon.get(one=False)
+    icons = Icon.query.filter(Icon.is_deleted == False)
+    if g.app_id:
+        icons = icons.filter(Icon.app_id == g.app_id)
+    if g.iconpack_id:
+        icons = icons.filter(Icon.iconpack_id == g.iconpack_id)
+
+    total = icons.count()
+    items = icons.order_by(text("create_time desc")).offset(g.offset).limit(g.count).all()
+    for icon in items:
+        icon.app = App.get(id=icon.app_id, one=True)
+        icon._fields.append("app")
+    total_page = math.ceil(total / g.count)
+    return IconPageSchemaList(
+        page=g.page,
+        count=g.count,
+        total=total,
+        items=items,
+        total_page=total_page,
+    )
 
 
 @icon_api.route("", methods=["POST"])

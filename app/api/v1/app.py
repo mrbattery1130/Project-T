@@ -86,11 +86,9 @@ def get_apps():
         app.catalogue = Catalogue.get(id=app.catalogue_id)
         app._fields.append("catalogue")
 
-        app.app_rels: List[AppRel] = AppRel.get(app_id=app.id, one=False)
-        app._fields.append("app_rels")
-
+        app_rels: List[AppRel] = AppRel.get(app_id=app.id, one=False)
         pn = []
-        for a in app.app_rels:
+        for a in app_rels:
             pn.append(a.package_name)
         app.package_names = list(set(pn))
         app._fields.append("package_names")

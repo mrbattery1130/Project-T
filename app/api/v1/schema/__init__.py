@@ -76,7 +76,7 @@ class AppOutSchema(BaseModel):
     priority: int
     catalogue: Optional[CatalogueOutSchema] = None
     package_names: Optional[List[str]] = None
-    app_rels: Optional[List[AppRelOutSchema]] = None
+    # app_rels: Optional[List[AppRelOutSchema]] = None
 
 
 class AppPageSchemaList(BasePageSchema):
@@ -101,6 +101,17 @@ class PackageNameQuerySearchSchema(BaseModel):
     app_name: Optional[str] = None
 
 
+class IconQuerySearchSchema(BaseModel):
+    iconpack_id: Optional[int] = None
+    app_id: Optional[int] = None
+    count: int = Field(20, gt=0, lt=101, description="0 < count <= 100")
+    page: int = 0
+
+    @staticmethod
+    def offset_handler(req, resp, req_validation_error, instance):
+        g.offset = req.context.query.count * req.context.query.page
+
+
 class IconInSchema(BaseModel):
     id: int
     url: str
@@ -113,11 +124,15 @@ class IconOutSchema(BaseModel):
     url: str
     iconpack_id: int
     app_id: int
+    app:AppOutSchema
 
 
 class IconSchemaList(BaseModel):
     __root__: List[IconOutSchema]
 
+
+class IconPageSchemaList(BasePageSchema):
+    items: List[IconOutSchema]
 
 class IconpackInSchema(BaseModel):
     name: str
