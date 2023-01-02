@@ -16,3 +16,5 @@ pytest==6.2.5
 pre-commit==2.16.0
 pytest-ordering==0.6
 flake8==4.0.1
+itsdangerous==2.0.1
+werkzeug==2.0.3
