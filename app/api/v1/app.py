@@ -1,10 +1,12 @@
 import math
+from typing import List
 
-from flask import Blueprint
+from flask import Blueprint, g
+from lin import db
 from lin.apidoc import DocResponse
 from lin.exception import Success
 from lin.jwt import login_required
-from sqlalchemy import text
+from sqlalchemy import text, or_
 
 from app.api.v1.exception import CatalogueNotFound, AppNotFound, AppRelNotFound
 
@@ -12,7 +14,8 @@ from app.api import AuthorizationBearerSecurity, api
 from app.api.v1.model.app_model import App
 from app.api.v1.model.app_rel_model import AppRel
 from app.api.v1.model.catalogue_model import Catalogue
-from app.api.v1.schema import *
+from app.api.v1.schema import AppQuerySearchSchema, CatalogueOutSchema, CatalogueSchemaList, \
+    AppOutSchema, AppPageSchemaList, AppInSchema, AppRelOutSchema, AppRelSchemaList, AppRelInSchema
 
 app_api = Blueprint('app', __name__)
 
@@ -77,11 +80,28 @@ def get_apps():
     获取App列表，分页展示
     """
     # return App.get(one=False)
-    apps = App.query.filter(App.is_deleted == False)
+    # 先筛出非删除项
+    apps = db.session.query(App).filter(App.is_deleted == False)
+    # 如果有keyword则筛选类似结果
+    if g.keyword:
+        apps = apps.filter(
+            or_(App.name.like("%" + g.keyword + "%"),
+                App.name_en.like("%" + g.keyword + "%")))
     total = apps.count()
-    items = (
-        apps.order_by(text("create_time desc")).offset(g.offset).limit(g.count).all()
-    )
+    if g.order_by == "id":
+        apps = apps.order_by(App.id)
+    elif g.order_by == "id_desc":
+        apps = apps.order_by(App.id.desc())
+    elif g.order_by == "priority":
+        apps = apps.order_by(App.priority)
+    elif g.order_by == "priority_desc":
+        apps = apps.order_by(App.priority.desc())
+    elif g.order_by == "create_time":
+        apps = apps.order_by(App.create_time)
+    else:
+        apps = apps.order_by(text("create_time desc"))
+    items = apps.offset(g.offset).limit(g.count).all()
+
     for app in items:
         app.catalogue = Catalogue.get(id=app.catalogue_id)
         app._fields.append("catalogue")

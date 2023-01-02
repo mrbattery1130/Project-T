@@ -85,6 +85,9 @@ class AppPageSchemaList(BasePageSchema):
 
 class AppQuerySearchSchema(BaseModel):
     keyword: Optional[str] = None
+    order_by: Optional[str] = Field(None,
+                                    description="默认按创建时间倒序，"
+                                                "可选create_time，id，priority，倒序加_desc")
     count: int = Field(5, gt=0, lt=16, description="0 < count < 16")
     page: int = 0
 
@@ -124,7 +127,7 @@ class IconOutSchema(BaseModel):
     url: str
     iconpack_id: int
     app_id: int
-    app:AppOutSchema
+    app: AppOutSchema
 
 
 class IconSchemaList(BaseModel):
@@ -133,6 +136,7 @@ class IconSchemaList(BaseModel):
 
 class IconPageSchemaList(BasePageSchema):
     items: List[IconOutSchema]
+
 
 class IconpackInSchema(BaseModel):
     name: str
