@@ -11,6 +11,7 @@ class Icon(Base):
     _url: Column = Column("url", String(100), nullable=False)
     iconpack_id: Column = Column(Integer, nullable=False)
     app_id: Column = Column(Integer, nullable=False)
+    progress = Column(String(100), nullable=True, default="nok")
 
     @property
     def url(self):

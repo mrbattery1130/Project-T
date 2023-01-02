@@ -107,6 +107,11 @@ class PackageNameQuerySearchSchema(BaseModel):
 class IconQuerySearchSchema(BaseModel):
     iconpack_id: Optional[int] = None
     app_id: Optional[int] = None
+    keyword: Optional[str] = None
+    order_by: Optional[str] = Field(None, description="默认按创建时间倒序，"
+                                                      "可选create_time，id，倒序加_desc")
+    catalogue_id: Optional[int] = None
+    progress: Optional[str] = None
     count: int = Field(20, gt=0, lt=101, description="0 < count <= 100")
     page: int = 0
 

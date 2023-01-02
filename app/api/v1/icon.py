@@ -4,13 +4,13 @@ from flask import Blueprint, g
 from lin.apidoc import DocResponse
 from lin.exception import Success
 from lin.jwt import login_required
-from sqlalchemy import text
+from sqlalchemy import or_
 
 from app.api import api, AuthorizationBearerSecurity
 from app.api.v1.exception import IconNotFound
 from app.api.v1.model.app_model import App
 from app.api.v1.model.icon_model import Icon
-from app.api.v1.schema import IconOutSchema, IconInSchema, IconSchemaList, IconQuerySearchSchema, \
+from app.api.v1.schema import IconOutSchema, IconInSchema, IconQuerySearchSchema, \
     IconPageSchemaList
 
 icon_api = Blueprint('icon', __name__)
@@ -44,16 +44,40 @@ def get_icons():
     """
     # return Icon.get(one=False)
     icons = Icon.query.filter(Icon.is_deleted == False)
+    # filter
     if g.app_id:
         icons = icons.filter(Icon.app_id == g.app_id)
     if g.iconpack_id:
         icons = icons.filter(Icon.iconpack_id == g.iconpack_id)
+    if g.keyword:
+        # 查询图标对应App的名称、英文名中包含keyword的项
+        icons = icons.join(App, Icon.app_id == App.id).filter(
+            or_(App.name.like("%" + g.keyword + "%"),
+                App.name_en.like("%" + g.keyword + "%")),
+            App.is_deleted == False
+        )
+    if g.catalogue_id:
+        # 查询图标对应App的分类
+        icons = icons.join(App, Icon.app_id == App.id) \
+            .filter(App.catalogue_id == g.catalogue_id, App.is_deleted == False)
+    # if g.progess:
+    #     icons = icons.filter(Icon.progress == g.progess)
+    # order
+    if g.order_by == "id":
+        icons = icons.order_by(Icon.id)
+    elif g.order_by == "id_desc":
+        icons = icons.order_by(Icon.id.desc())
+    elif g.order_by == "create_time":
+        icons = icons.order_by(Icon.create_time)
+    else:
+        icons = icons.order_by(Icon.create_time.desc())
 
     total = icons.count()
-    items = icons.order_by(text("create_time desc")).offset(g.offset).limit(g.count).all()
+    items = icons.offset(g.offset).limit(g.count).all()
     for icon in items:
         icon.app = App.get(id=icon.app_id, one=True)
         icon._fields.append("app")
+
     total_page = math.ceil(total / g.count)
     return IconPageSchemaList(
         page=g.page,
