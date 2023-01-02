@@ -58,11 +58,6 @@ def get_app(app_id):
     """
     app: App = App.get(id=app_id)
     if app:
-        app.catalogue = Catalogue.get(id=app.catalogue_id)
-        app._fields.append("catalogue")
-
-        app.app_rels = AppRel.get(app_id=app.id, one=False)
-        app._fields.append("app_rels")
         return app
     raise AppNotFound
 
@@ -103,15 +98,16 @@ def get_apps():
     items = apps.offset(g.offset).limit(g.count).all()
 
     for app in items:
-        app.catalogue = Catalogue.get(id=app.catalogue_id)
-        app._fields.append("catalogue")
-
-        app_rels: List[AppRel] = AppRel.get(app_id=app.id, one=False)
-        pn = []
-        for a in app_rels:
-            pn.append(a.package_name)
-        app.package_names = list(set(pn))
-        app._fields.append("package_names")
+        app.append_attrs()
+        # app.catalogue = Catalogue.get(id=app.catalogue_id)
+        # app._fields.append("catalogue")
+        #
+        # app_rels: List[AppRel] = AppRel.get(app_id=app.id, one=False)
+        # pn = []
+        # for a in app_rels:
+        #     pn.append(a.package_name)
+        # app.package_names = list(set(pn))
+        # app._fields.append("package_names")
 
     total_page = math.ceil(total / g.count)
 
