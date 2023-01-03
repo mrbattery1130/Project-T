@@ -7,7 +7,7 @@ from lin.jwt import login_required
 from sqlalchemy import or_
 
 from app.api import api, AuthorizationBearerSecurity
-from app.api.v1.exception import IconNotFound
+from app.api.v1.exception import IconNotFound, IconCannotReopen
 from app.api.v1.model.app_model import App
 from app.api.v1.model.icon_model import Icon
 from app.api.v1.schema import IconOutSchema, IconInSchema, IconQuerySearchSchema, \
@@ -60,8 +60,8 @@ def get_icons():
         # 查询图标对应App的分类
         icons = icons.join(App, Icon.app_id == App.id) \
             .filter(App.catalogue_id == g.catalogue_id, App.is_deleted == False)
-    # if g.progess:
-    #     icons = icons.filter(Icon.progress == g.progess)
+    if g.progess:
+        icons = icons.filter(Icon.progress == g.progess)
     # order
     if g.order_by == "id":
         icons = icons.order_by(Icon.id)
@@ -118,10 +118,31 @@ def update_icon(icon_id, json: IconInSchema):
     if icon:
         icon.update(
             id=icon_id,
+            progress="ok",
             **json.dict(),
             commit=True,
         )
         return Success(23)
+    raise IconNotFound
+
+
+@icon_api.route("/reopen/<icon_id>", methods=["POST", "PUT"])
+@login_required
+@api.validate(
+    security=[AuthorizationBearerSecurity],
+    resp=DocResponse(Success(23)),
+    tags=["图标"],
+)
+def reopen_icon(icon_id):
+    """
+    重新打开图标绘制需求
+    """
+    icon = Icon.get(id=icon_id)
+    if icon:
+        if icon.progress == "ok":
+            icon.update(progess="reopen")
+            return Success(23)
+        raise IconCannotReopen
     raise IconNotFound
 
 

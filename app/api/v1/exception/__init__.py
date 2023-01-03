@@ -1,4 +1,4 @@
-from lin import Duplicated, NotFound
+from lin import Duplicated, NotFound, ParameterError
 
 
 class BookNotFound(NotFound):
@@ -29,6 +29,11 @@ class AppRelNotFound(NotFound):
 
 class IconNotFound(NotFound):
     message = "图标不存在"
+    _config = False
+
+
+class IconCannotReopen(ParameterError):
+    message = "图标不可重做"
     _config = False
 
 
