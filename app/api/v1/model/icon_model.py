@@ -26,5 +26,5 @@ class Icon(Base):
         if self._url is not None:
             return site_domain + os.path.join(
                 current_app.static_url_path,
-                'drawable/',
+                # 'drawable/',
                 self._url)
