@@ -139,6 +139,19 @@ class IconSchemaList(BaseModel):
     __root__: List[IconOutSchema]
 
 
+class IconReqOutSchema(BaseModel):
+    iconpack_id: int
+    icon_id: int
+    app_id: int
+    app_name: str
+    app_name_en: str
+    progress: str
+
+
+class IconReqSchemaList(BaseModel):
+    __root__: List[IconReqOutSchema]
+
+
 class IconPageSchemaList(BasePageSchema):
     items: List[IconOutSchema]
 
